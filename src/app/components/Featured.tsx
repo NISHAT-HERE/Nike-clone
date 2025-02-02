@@ -4,7 +4,7 @@ import Image from 'next/legacy/image';
 
 const Featured = () => {
   return (
-    <section className="w-full px-12 py-16">
+    <section className="w-full justify-center px-12 py-16">
       <div className="max-w-[1344px] mx-auto">
       <div className="container mx-auto text-center">
         <h2 className="text-[30px] font-midium mb-7 text-left">Featured</h2>
@@ -18,7 +18,7 @@ const Featured = () => {
             className="object-cover"
           />
         </div>
-        <h3 className="text-5xl font-bold mt-9 ">STEP INTO WHAT FEELS GOOD</h3>
+        <h3 className="text-2xl md:text-3xl lg:text-5xl font-bold mt-9">STEP INTO WHAT FEELS GOOD</h3>
         <p className="text-[12.9px] mt-4 mb-8">
           Cause everyone should know the feeling of running in that perfect pair.
         </p>

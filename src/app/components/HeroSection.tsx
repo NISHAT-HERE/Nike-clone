@@ -37,7 +37,7 @@ const HeroSection = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-tight font-medium tracking-tight mb-4 sm:mb-6 text-black">
             NIKE AIR MAX PULSE
           </h1>
-          <p className="text-base sm:text-lg lg:text-[20px] leading-normal mb-6 sm:mb-8 text-black px-4">
+          <p className="text-base sm:text-[10px] lg:text-[13.5px] leading-normal mb-6 sm:mb-8 text-black px-4">
             Extreme comfort. Hyper durable. Max volume. Introducing the Air Max Pulse
             {/* Only show line break on larger screens */}
             <span className="hidden sm:inline">

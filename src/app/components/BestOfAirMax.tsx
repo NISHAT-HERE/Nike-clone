@@ -9,29 +9,65 @@ const products = [
     id: 1,
     name: "Nike Air Max Pulse",
     category: "Women's Shoes",
-    price: "₹ 13,995",
-    image: "/Image1.png"
+    price: "₹ 10,995",
+    image: "/Image1.png",
+    link: "/product/1"
   },
   {
     id: 2,
     name: "Nike Air Max Pulse",
     category: "Men's Shoes",
     price: "₹ 13,995",
-    image: "/Image2.png"
+    image: "/Image2.png",
+    link: "/product/2"
   },
   {
     id: 3,
     name: "Nike Air Max 97 SE",
     category: "Men's Shoes",
-    price: "₹ 16,995",
-    image: "/Image3.png"
+    price: "₹ 13,995",
+    image: "/Image3.png",
+    link: "/product/3"
   },
   {
     id: 4,
-    name: "Nike Air Max 97",
+    name: "Nike Court Vision Low",
     category: "Women's Shoes",
     price: "₹ 16,995",
-    image: "/Image4.png"
+    image: "/product9.svg",
+    link: "/product-detail9"
+  },
+  {
+    id: 5,
+    name: "Nike Air Force 1 Mid '07",
+    category: "Men's Shoes",
+    price: "₹ 5695.00",
+    image: "/product1.svg",
+    link: "/product-detail1"
+  },
+  {
+    id: 6,
+    name: "Nike Court Vision Low Next Nature",
+    category: "Men's Shoes",
+    price: "₹ 18,995",
+    image: "/product2.svg",
+    link: "/product-detail2"
+  },
+  {
+    id: 7,
+    name: "Nike Air Force 1 PLT.AF.ORM",
+    category: "Women's Shoes",
+    price: "₹ 12,995",
+    image: "/product3.svg",
+    link: "/product-detail3"
+  },
+  {
+    id: 8,
+    name: "Nike Dunk Low Retro SE",
+    category: "Men's Shoes",
+    price: "₹ 14,995",
+    image: "/product4.svg",
+    link: "/product-detail4"
   }
 ]
 
@@ -46,7 +82,7 @@ export default function BestOfAirMax() {
   }
 
   return (
-    <section className="w-full px-12 py-16">
+    <section className="w-full justify-center px-12 py-16">
       <div className="max-w-[1344px] mx-auto">
       <div className="flex justify-between items-center mb-[32px]">
         <h2 className="text-[24px] font-medium">Best of Air Max</h2>
@@ -79,7 +115,7 @@ export default function BestOfAirMax() {
       >
         {products.map((product) => (
           <a 
-            href={`/products/${product.id}`} 
+            href={product.link} 
             key={product.id} 
             className="group flex-none w-[calc(33.333%-16px)] min-w-[300px]"
           >

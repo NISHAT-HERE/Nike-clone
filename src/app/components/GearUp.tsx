@@ -38,13 +38,14 @@ const womensProducts = [
 
 const GearUp = () => {
   return (
-    <section className="w-full px-12 py-16">
+    <section className="w-full px-5 sm:px-8 md:px-12 py-8 sm:py-12 md:py-16">
       <div className="max-w-[1344px] mx-auto">
-        <h2 className="text-[24px] font-medium mb-8">Gear Up</h2>
-        <div className="flex justify-between items-center mb-4">
-            <span className="text-[16px] mr-4"></span>
-            <div className="flex items-center">
-            <span className="text-[16px] mr-4">Shop Men's</span>
+        <h2 className="text-[24px] font-medium mb-6 md:mb-8">Gear Up</h2>
+        
+        {/* Navigation Controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4">
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <span className="text-[14px] md:text-[16px]">Shop Men's</span>
             <div className="flex gap-2">
               <button className="w-[36px] h-[36px] bg-[#e5e5e5] rounded-full flex items-center justify-center hover:opacity-60 transition-opacity">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
@@ -59,8 +60,8 @@ const GearUp = () => {
             </div>
           </div>
 
-          <div className="flex items-center">
-            <span className="text-[16px] mr-4">Shop Women's</span>
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <span className="text-[14px] md:text-[16px]">Shop Women's</span>
             <div className="flex gap-2">
               <button className="w-[36px] h-[36px] bg-[#e5e5e5] rounded-full flex items-center justify-center hover:opacity-60 transition-opacity">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
@@ -76,7 +77,8 @@ const GearUp = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-5">
+        {/* Product Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
           {mensProducts.map((product) => (
             <div key={product.id} className="group cursor-pointer">
               <div className="relative aspect-square bg-[#f5f5f5] mb-3">
@@ -89,11 +91,11 @@ const GearUp = () => {
                 />
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-[14px] font-medium">{product.name}</h3>
-                  <span className="text-[10px]">{product.price}</span>
+                <div className="flex justify-between items-start gap-2">
+                  <h3 className="text-[12px] sm:text-[14px] font-medium flex-1">{product.name}</h3>
+                  <span className="text-[12px] whitespace-nowrap">{product.price}</span>
                 </div>
-                <p className="text-[16px] text-[#707072] whitespace-pre-line">{product.category}</p>
+                <p className="text-[12px] sm:text-[14px] md:text-[16px] text-[#707072] whitespace-pre-line">{product.category}</p>
               </div>
             </div>
           ))}
@@ -109,11 +111,11 @@ const GearUp = () => {
                 />
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-[14px] font-medium">{product.name}</h3>
-                  <span className="text-[10px]">{product.price}</span>
+                <div className="flex justify-between items-start gap-2">
+                  <h3 className="text-[12px] sm:text-[14px] font-medium flex-1">{product.name}</h3>
+                  <span className="text-[12px] whitespace-nowrap">{product.price}</span>
                 </div>
-                <p className="text-[16px] text-[#707072] whitespace-pre-line">{product.category}</p>
+                <p className="text-[12px] sm:text-[14px] md:text-[16px] text-[#707072] whitespace-pre-line">{product.category}</p>
               </div>
             </div>
           ))}

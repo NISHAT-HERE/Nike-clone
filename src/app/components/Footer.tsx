@@ -11,8 +11,8 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-[#111] text-white">
-      <div className="w-full max-w-[1440px] mx-auto px-5 sm:px-8 md:px-10 lg:px-120 py-8 lg:py-10">
+    <footer className="w-full justify-center bg-[#111] text-white">
+      <div className="w-full justify-center max-w-[1440px] mx-auto px-5 sm:px-8 md:px-10 lg:px-120 py-8 lg:py-10">
         {/* Main Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* First Column */}
@@ -136,11 +136,11 @@ const Footer = () => {
             <span>© 2023 Nike, Inc. All Rights Reserved</span>
           </div>
 
-          <div className="flex gap-8 text-[12px] text-[#7e7e7e]">
-            <a href="/guides" className="hover:text-white">Guides</a>
-            <a href="/terms" className="hover:text-white">Terms of Sale</a>
-            <a href="/terms-of-use" className="hover:text-white">Terms of Use</a>
-            <a href="/privacy" className="hover:text-white">Nike Privacy Policy</a>
+          <div className="flex flex-wrap gap-4 text-[12px] text-[#7e7e7e]">
+            <Link href="/guides" className="hover:text-white">Guides</Link>
+            <Link href="/terms" className="hover:text-white">Terms of Sale</Link>
+            <Link href="/terms-of-use" className="hover:text-white">Terms of Use</Link>
+            <Link href="/privacy" className="hover:text-white">Nike Privacy Policy</Link>
           </div>
         </div>
       </div>

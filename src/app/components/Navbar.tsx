@@ -1,25 +1,99 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiMenu, FiX } from 'react-icons/fi';
 
 const Navbar = () => {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
   useEffect(() => {
-    setCurrentDate(new Date().toISOString());
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && typeof window !== 'undefined') {
+      const savedSearches = localStorage.getItem('recentSearches');
+      if (savedSearches) {
+        setRecentSearches(JSON.parse(savedSearches));
+      }
+    }
+  }, [mounted]);
+
+  const saveRecentSearch = (query: string) => {
+    if (typeof window !== 'undefined') {
+      const updatedSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+      setRecentSearches(updatedSearches);
+      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    }
+  };
+
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    if (query.length > 0) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Search failed');
+        const data = await response.json();
+        setSearchResults(data);
+        setShowResults(true);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setShowResults(false);
+      setSearchResults([]);
+    }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setShowResults(false);
+      setSearchQuery('');
+    }
+  };
+
+  // Close search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target as Element).closest('.search-container')) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const navigate = (path: string) => {
     router.push(path);
   };
 
+  // Don't render anything until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <nav className="w-full bg-white text-[#111] relative">
+    <nav className="w-full justify-center bg-white text-[#111] relative ">
       {/* Top Bar */}
       <div className="bg-[#f5f5f5] px-4 md:px-8 py-2 flex justify-between items-center text-xs md:text-sm">
         <button onClick={() => navigate('/')} className="hover:text-gray-500">
@@ -43,7 +117,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navigation */}
-      <div className="bg-white px-4 md:px-8 py-2 md:py-4 flex justify-between items-center border-b border-gray-200">
+      <div className="bg-white px-4 md:px-8 py-2 flex justify-between items-center border-gray-200">
         {/* Logo */}
         <a href="/">
         <svg width="59" height="22" viewBox="0 0 59 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,27 +128,58 @@ const Navbar = () => {
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex gap-7 xl:gap-8 font-medium">
           <a href="/" className="hover:text-gray-500">New & Featured</a>
-          <a href="/product-list" className="hover:text-gray-500">Men</a>
-          <a href="/product-list" className="hover:text-gray-500">Women</a>
-          <a href="/product-list" className="hover:text-gray-500">Kids</a>
+          <a href="/product-list?category=men" className="hover:text-gray-500">Men</a>
+          <a href="/product-list?category=women" className="hover:text-gray-500">Women</a>
+          <a href="/product-list?category=kids" className="hover:text-gray-500">Kids</a>
           <a href="/product-list" className="hover:text-gray-500">Sale</a>
-          <a href="/product-list" className="hover:text-gray-500">SNKRS</a>
+          <a href="/product-list?category=snkrs" className="hover:text-gray-500">SNKRS</a>
         </div>
 
         {/* Right Section: Search, Favorites, Bag */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Desktop Search */}
-          <div className="hidden md:flex relative items-center">
-            <FiSearch className="absolute left-3 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-[#f5f5f5] rounded-full py-2 pl-10 pr-4 w-40 focus:outline-none focus:w-60 transition-all duration-300 placeholder-gray-500"
-            />
+          <div className="hidden md:flex relative items-center search-container">
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                placeholder="Search"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                className="bg-[#f5f5f5] rounded-full py-2 pl-10 pr-4 w-40 focus:outline-none focus:w-60 transition-all duration-300 placeholder-gray-500"
+                />
+              {showResults && searchResults.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                        {searchResults.map((result: any) => (
+                          <div
+                      key={result.id}
+                      className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3"
+                      onClick={() => {
+                        router.push(`/product-detail${result.id}`);
+                        setShowResults(false);
+                        setSearchQuery('');
+                      }}
+                          >
+                              {result.image && (
+                        <div className="w-12 h-12 relative">
+                                  <img
+                                    src={result.image}
+                                    alt={result.name}
+                            className="object-cover rounded"
+                                  />
+                                </div>
+                              )}
+                      <div>
+                        <div className="font-medium">{result.name}</div>
+                        <div className="text-sm text-gray-500">{result.category}</div>
+                      </div>
+                          </div>
+                        ))}
+                </div>
+              )}
+            </form>
           </div>
-          {/* Mobile Search Icon */}
+          {/* Mobile Search */}
           <button 
             className="md:hidden p-2 hover:bg-gray-100 rounded-full"
             onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -90,7 +195,7 @@ const Navbar = () => {
           </button>
 
           <button className="p-2 hover:bg-gray-100 rounded-full">
-            <a href="/checkout">
+            <a href="/cart">
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clipPath="url(#clip0_1_28)">
           <path d="M14.25 14.25V12C14.25 11.4033 14.4871 10.831 14.909 10.409C15.331 9.98705 15.9033 9.75 16.5 9.75H19.5C20.0967 9.75 20.669 9.98705 21.091 10.409C21.5129 10.831 21.75 11.4033 21.75 12C21.75 12.5967 21.5129 13.169 21.091 13.591C20.669 14.0129 20.0967 14.25 19.5 14.25H9.75V22.5C9.75 23.4946 10.1451 24.4484 10.8483 25.1517C11.5516 25.8549 12.5054 26.25 13.5 26.25H22.5C23.4946 26.25 24.4484 25.8549 25.1517 25.1517C25.8549 24.4484 26.25 23.4946 26.25 22.5V14.25H23.5" stroke="#111111" strokeWidth="1.8"/>
@@ -119,17 +224,47 @@ const Navbar = () => {
 
       {/* Mobile Search Bar */}
       {isSearchOpen && (
-        <div className="md:hidden px-4 py-2 border-b border-gray-200">
-          <div className="relative flex items-center">
-            <FiSearch className="absolute left-3 text-gray-400" />
-            <input
-              type="text"
+        <div className="md:hidden px-4 py-2 border-b border-gray-200 search-container">
+          <form onSubmit={handleSearchSubmit} className="relative">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
               placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
+                onChange={handleSearch}
               className="bg-[#f5f5f5] rounded-full py-2 pl-10 pr-4 w-full focus:outline-none placeholder-gray-500"
-            />
-          </div>
+              />
+            {showResults && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                      {searchResults.map((result: any) => (
+                        <div
+                    key={result.id}
+                    className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3"
+                    onClick={() => {
+                      router.push(`/product-detail${result.id}`);
+                      setShowResults(false);
+                      setSearchQuery('');
+                      setIsSearchOpen(false);
+                    }}
+                        >
+                            {result.image && (
+                      <div className="w-12 h-12 relative">
+                                <img
+                                  src={result.image}
+                                  alt={result.name}
+                          className="object-cover rounded"
+                                />
+                              </div>
+                            )}
+                    <div>
+                      <div className="font-medium">{result.name}</div>
+                      <div className="text-sm text-gray-500">{result.category}</div>
+                    </div>
+                        </div>
+                      ))}
+              </div>
+            )}
+          </form>
         </div>
       )}
 
@@ -156,11 +291,11 @@ const Navbar = () => {
           <div className="h-full overflow-y-auto">
             <div className="flex flex-col">
               <a href="/" className="px-6 py-3 hover:bg-gray-100">New & Featured</a>
-              <a href="/product-list" className="px-6 py-3 hover:bg-gray-100">Men</a>
-              <a href="/product-list" className="px-6 py-3 hover:bg-gray-100">Women</a>
-              <a href="/product-list" className="px-6 py-3 hover:bg-gray-100">Kids</a>
+              <a href="/product-list?category=men" className="px-6 py-3 hover:bg-gray-100">Men</a>
+              <a href="/product-list?category=women" className="px-6 py-3 hover:bg-gray-100">Women</a>
+              <a href="/product-list?category=kids" className="px-6 py-3 hover:bg-gray-100">Kids</a>
               <a href="/product-list" className="px-6 py-3 hover:bg-gray-100">Sale</a>
-              <a href="/product-list" className="px-6 py-3 hover:bg-gray-100">SNKRS</a>
+              <a href="/product-list?category=snkrs" className="px-6 py-3 hover:bg-gray-100">SNKRS</a>
             </div>
             <div className="border-t border-gray-200 px-6 py-4 space-y-3">
               <a href="/" className="block hover:text-gray-500">Find a Store</a>
