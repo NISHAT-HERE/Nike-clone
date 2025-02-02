@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/legacy/image';
 import { Product } from '@/app/data/products';
 import { useSearchParams } from 'next/navigation';
@@ -34,6 +34,14 @@ const relatedCategories = [
 ];
 
 const ProductList = () => {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="w-8 h-8 border-2 border-[#e5e5e5] border-t-[#111] rounded-full animate-spin"></div></div>}>
+      <ProductListContent />
+    </Suspense>
+  );
+};
+
+const ProductListContent = () => {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
   const [products, setProducts] = useState<Product[]>([]);

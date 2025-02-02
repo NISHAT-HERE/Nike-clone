@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/legacy/image';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
@@ -49,11 +50,16 @@ const HeroSection = () => {
             <button className="w-full sm:w-auto bg-black text-white px-4 sm:px-6 py-2.5 rounded-full hover:bg-gray-800 text-sm font-medium">
               Notify Me
             </button>
-            <a href="/product-list">
+            <Link href="/product-list">
               <button className="w-full sm:w-auto bg-black text-white px-4 sm:px-6 py-2.5 rounded-full hover:bg-gray-800 text-sm font-medium">
                 Shop Air Max
               </button>
-            </a>
+            </Link>
+          </div>
+          <div className="mt-6 sm:mt-8">
+            <Link href="/" className="bg-[#111] text-white px-6 py-3 rounded-full inline-block hover:bg-gray-800 transition-colors duration-200">
+              Shop Now
+            </Link>
           </div>
         </div>
       </div>

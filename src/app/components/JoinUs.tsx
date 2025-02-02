@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 const JoinUs = () => {
   const [formData, setFormData] = useState({
@@ -138,12 +139,11 @@ const JoinUs = () => {
             <a href="/terms" className="underline hover:text-[#111]">Terms of Use</a>.
           </div>
 
-          <button
-            type="submit"
-            className="w-full h-[40px] bg-black text-white rounded hover:bg-[#1f1f1f] transition-colors duration-200"
-          >
-            JOIN US
-          </button>
+          <div className="mt-6 sm:mt-8">
+            <Link href="/" className="bg-[#111] text-white px-6 py-3 rounded-full inline-block hover:bg-gray-800 transition-colors duration-200">
+              JOIN US
+            </Link>
+          </div>
         </form>
 
         <div className="text-center text-[12px] text-[#707072]">
