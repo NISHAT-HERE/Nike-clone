@@ -7,10 +7,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const MOCK_USERS = [
   {
     id: 1,
-    email: 'user@example.com',
+    email: 'NISHAT@gmail.com',
     // In a real app, this would be hashed
     password: 'password123',
-    name: 'John Doe'
+    name: 'NISHAT'
   }
 ];
 
