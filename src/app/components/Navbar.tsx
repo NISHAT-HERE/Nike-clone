@@ -298,7 +298,7 @@ const Navbar = () => {
               <Link href="/product-list?category=men" className="px-6 py-3 hover:bg-gray-100">Men</Link>
               <Link href="/product-list?category=women" className="px-6 py-3 hover:bg-gray-100">Women</Link>
               <Link href="/product-list?category=kids" className="px-6 py-3 hover:bg-gray-100">Kids</Link>
-              <Link href="/product-list?category=sale" className="px-6 py-3 hover:bg-gray-100">Sale</Link>
+              <Link href="/product-list" className="px-6 py-3 hover:bg-gray-100">Sale</Link>
               <Link href="/product-list?category=snkrs" className="px-6 py-3 hover:bg-gray-100">SNKRS</Link>
             </div>
             <div className="border-t border-gray-200 px-6 py-4 space-y-3">
