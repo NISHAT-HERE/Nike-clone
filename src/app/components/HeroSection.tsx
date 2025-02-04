@@ -56,11 +56,6 @@ const HeroSection = () => {
               </button>
             </Link>
           </div>
-          <div className="mt-6 sm:mt-8">
-            <Link href="/" className="bg-[#111] text-white px-6 py-3 rounded-full inline-block hover:bg-gray-800 transition-colors duration-200">
-              Shop Now
-            </Link>
-          </div>
         </div>
       </div>
     </div>
